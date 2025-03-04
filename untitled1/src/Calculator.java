@@ -10,43 +10,37 @@ public class Calculator extends JFrame implements ActionListener {
     private boolean isOperatorClicked = false;
 
     public Calculator() {
-        setTitle("Calculator");
-        setSize(350, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-        setResizable(false);
-
-        display = new JTextField();
-        display.setEditable(false);
-        display.setHorizontalAlignment(JTextField.RIGHT);
-        display.setFont(new Font("Arial", Font.BOLD, 28));
-        display.setBackground(Color.BLACK);
-        display.setForeground(Color.WHITE);
-        display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(display, BorderLayout.NORTH);
-
+        setTitle("Calc"); 
+        setSize(200, 300); 
+        setDefaultCloseOperation(HIDE_ON_CLOSE); 
+        setLayout(new FlowLayout()); 
+        setResizable(true); 
+        
+        display = new JTextField(5); 
+        display.setEditable(true);
+        display.setHorizontalAlignment(JTextField.LEFT); 
+        display.setFont(new Font("Arial", Font.PLAIN, 10)); 
+        add(display);
+        
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 4, 5, 5));
-        buttonPanel.setBackground(Color.DARK_GRAY);
-
+        buttonPanel.setLayout(new GridLayout(3, 3)); 
+        
         String[] buttons = {
                 "7", "8", "9", "/",
                 "4", "5", "6", "*",
                 "1", "2", "3", "-",
-                "0", "C", "=", "+"
+                "0", "C", "=" 
         };
 
         for (String text : buttons) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.BOLD, 20));
-            button.setBackground(text.matches("[0-9]") ? Color.LIGHT_GRAY : Color.ORANGE);
-            button.setForeground(Color.BLACK);
-            button.setFocusPainted(false);
+            button.setFont(new Font("Arial", Font.PLAIN, 10)); 
+            button.setBackground(Color.GRAY); 
             button.addActionListener(this);
             buttonPanel.add(button);
         }
 
-        add(buttonPanel, BorderLayout.CENTER);
+        add(buttonPanel);
         setVisible(true);
     }
 
@@ -54,26 +48,17 @@ public class Calculator extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-        if (command.charAt(0) >= '0' && command.charAt(0) <= '9') {
-            if (isOperatorClicked) {
-                display.setText(command);
-                isOperatorClicked = false;
-            } else {
-                display.setText(display.getText() + command);
-            }
+        if (command.matches("[0-9]") || command.equals(".")) { 
+            display.setText(display.getText() + command);
         } else if (command.equals("C")) {
-            display.setText("");
-            num1 = num2 = 0;
-            operator = "";
+            display.setText("0"); // 
         } else if (command.equals("=")) {
             num2 = Double.parseDouble(display.getText());
             double result = calculate(num1, num2, operator);
-            display.setText(String.valueOf(result));
-            operator = "";
+            display.setText("Kết quả: " + result); // 
         } else {
             num1 = Double.parseDouble(display.getText());
             operator = command;
-            isOperatorClicked = true;
         }
     }
 
@@ -82,7 +67,7 @@ public class Calculator extends JFrame implements ActionListener {
             case "+": return a + b;
             case "-": return a - b;
             case "*": return a * b;
-            case "/": return (b != 0) ? a / b : 0;
+            case "/": return a / b; 
             default: return 0;
         }
     }
